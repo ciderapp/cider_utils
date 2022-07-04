@@ -1,5 +1,5 @@
 use neon::prelude::*;
-use lofty::{Accessor, AudioFile, Probe, FileProperties, Picture};
+use lofty::{Accessor, AudioFile, Probe, FileProperties};
 use std::path::Path;
 extern crate neon;
 extern crate base64;
@@ -37,6 +37,7 @@ pub fn parse_file(mut cx: FunctionContext) -> JsResult<JsObject> {
 
     let title: Handle<JsString> = cx.string(tag.title().unwrap_or("0"));
     let artist: Handle<JsString> = cx.string(tag.artist().unwrap_or("0"));
+    let album: Handle<JsString> = cx.string(tag.album().unwrap_or("0"));
     let genre: Handle<JsString> = cx.string(tag.genre().unwrap_or("0"));
     let bitrate: Handle<JsNumber> = cx.number(properties.audio_bitrate().unwrap_or(0));
     let sample_rate: Handle<JsNumber> = cx.number(properties.sample_rate().unwrap_or(0));
@@ -47,6 +48,7 @@ pub fn parse_file(mut cx: FunctionContext) -> JsResult<JsObject> {
     let disc_number: Handle<JsNumber> = cx.number(tag.disk().unwrap_or(0));
     metadata_obj.set(&mut cx, "title", title)?;
     metadata_obj.set(&mut cx, "artist", artist)?;
+    metadata_obj.set(&mut cx, "album", album)?;
     metadata_obj.set(&mut cx, "genre", genre)?;
     metadata_obj.set(&mut cx, "bitrate", bitrate)?;
     metadata_obj.set(&mut cx, "sample_rate", sample_rate)?;
