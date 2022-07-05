@@ -31,7 +31,7 @@ pub fn parse_file(mut cx: FunctionContext) -> JsResult<JsObject> {
 	};
 
     let properties: &FileProperties = tagged_file.properties();
-    let duration: u64 = properties.duration().as_secs();
+    let duration: f64 = properties.duration().as_secs_f64();
     //let picture: &[Picture] = tag.pictures();
     let metadata_obj: Handle<JsObject> = cx.empty_object();
 
@@ -42,8 +42,8 @@ pub fn parse_file(mut cx: FunctionContext) -> JsResult<JsObject> {
     let bitrate: Handle<JsNumber> = cx.number(properties.audio_bitrate().unwrap_or(0));
     let sample_rate: Handle<JsNumber> = cx.number(properties.sample_rate().unwrap_or(0));
     let bit_depth: Handle<JsNumber> = cx.number(properties.bit_depth().unwrap_or(0));
-    let duration_in_ms: Handle<JsNumber> = cx.number(duration as f64);
-    let year: Handle<JsNumber> = cx.number(tag.year().unwrap_or(0) * 1000);
+    let duration_in_ms: Handle<JsNumber> = cx.number(duration);
+    let year: Handle<JsNumber> = cx.number(tag.year().unwrap_or(0));
     let track_number: Handle<JsNumber> = cx.number(tag.track().unwrap_or(0));
     let disc_number: Handle<JsNumber> = cx.number(tag.disk().unwrap_or(0));
     metadata_obj.set(&mut cx, "title", title)?;
