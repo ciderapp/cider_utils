@@ -46,6 +46,7 @@ pub fn parse_file(mut cx: FunctionContext) -> JsResult<JsObject> {
     let year: Handle<JsNumber> = cx.number(tag.year().unwrap_or(0));
     let track_number: Handle<JsNumber> = cx.number(tag.track().unwrap_or(0));
     let disc_number: Handle<JsNumber> = cx.number(tag.disk().unwrap_or(0));
+    
     metadata_obj.set(&mut cx, "title", title)?;
     metadata_obj.set(&mut cx, "artist", artist)?;
     metadata_obj.set(&mut cx, "album", album)?;
@@ -57,6 +58,7 @@ pub fn parse_file(mut cx: FunctionContext) -> JsResult<JsObject> {
     metadata_obj.set(&mut cx, "year", year)?;
     metadata_obj.set(&mut cx, "track_number", track_number)?;
     metadata_obj.set(&mut cx, "disc_number", disc_number)?;
+
     if tag.pictures().len() > 0 {
       let picture_b64: Handle<JsString> = cx.string(base64::encode(tag.pictures()[0].data()));
       metadata_obj.set(&mut cx, "artwork", picture_b64)?;
