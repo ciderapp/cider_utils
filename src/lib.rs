@@ -42,7 +42,7 @@ pub fn parse_file(mut cx: FunctionContext) -> JsResult<JsObject> {
     let bitrate: Handle<JsNumber> = cx.number(properties.audio_bitrate().unwrap_or(0));
     let sample_rate: Handle<JsNumber> = cx.number(properties.sample_rate().unwrap_or(0));
     let bit_depth: Handle<JsNumber> = cx.number(properties.bit_depth().unwrap_or(0));
-    let duration_in_ms: Handle<JsNumber> = cx.number(duration);
+    let duration_in_sec: Handle<JsNumber> = cx.number(duration);
     let year: Handle<JsNumber> = cx.number(tag.year().unwrap_or(0));
     let track_number: Handle<JsNumber> = cx.number(tag.track().unwrap_or(0));
     let disc_number: Handle<JsNumber> = cx.number(tag.disk().unwrap_or(0));
@@ -53,7 +53,7 @@ pub fn parse_file(mut cx: FunctionContext) -> JsResult<JsObject> {
     metadata_obj.set(&mut cx, "bitrate", bitrate)?;
     metadata_obj.set(&mut cx, "sample_rate", sample_rate)?;
     metadata_obj.set(&mut cx, "bit_depth", bit_depth)?;
-    metadata_obj.set(&mut cx, "duration_in_ms", duration_in_ms)?;
+    metadata_obj.set(&mut cx, "duration_in_ms", duration_in_sec)?;
     metadata_obj.set(&mut cx, "year", year)?;
     metadata_obj.set(&mut cx, "track_number", track_number)?;
     metadata_obj.set(&mut cx, "disc_number", disc_number)?;
