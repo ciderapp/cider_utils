@@ -3,4 +3,5 @@ Modules written in Rust to accelerate CPU bound workloads on the Client-Side of 
 
 *Assuming you know how to set up a Rust development environment.*
 
+Usage:
 `npm install` to build `index.node` which is the node facing module.
