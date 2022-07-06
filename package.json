@@ -9,7 +9,9 @@
 
   "scripts": {
     "build": "cargo-cp-artifact -nc index.node -- cargo build --message-format=json-render-diagnostics",
+    "build-upload": "cargo-cp-artifact -nc prebuilds/index.node -- cargo build --message-format=json-render-diagnostics",
     "build-debug": "npm run build --",
+    "build-ci": "npm run build-upload -- --release",
     "build-release": "npm run build -- --release",
     "install": "npm run build-release",
     "test": "cargo test"
