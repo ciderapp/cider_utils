@@ -1,5 +1,5 @@
 const neonBinding = require('./index')
 
 module.exports = {
-    parseFile: neonBinding.parsefile
+    parseFile: neonBinding.parseFile
 };

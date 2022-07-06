@@ -1,6 +1,6 @@
 use neon::prelude::*;
 use lofty::{Accessor, AudioFile, Probe, FileProperties};
-use std::path::Path;
+use std::{path::Path, ffi::OsStr};
 extern crate neon;
 extern crate base64;
 
@@ -33,6 +33,7 @@ pub fn parse_file(mut cx: FunctionContext) -> JsResult<JsObject> {
     let properties: &FileProperties = tagged_file.properties();
     let duration: u128 = properties.duration().as_millis();
     //let picture: &[Picture] = tag.pictures();
+    let file_ext = path.extension().and_then(OsStr::to_str);
     let metadata_obj: Handle<JsObject> = cx.empty_object();
 
     let title: Handle<JsString> = cx.string(tag.title().unwrap_or("0"));
@@ -46,6 +47,8 @@ pub fn parse_file(mut cx: FunctionContext) -> JsResult<JsObject> {
     let year: Handle<JsNumber> = cx.number(tag.year().unwrap_or(0));
     let track_number: Handle<JsNumber> = cx.number(tag.track().unwrap_or(0));
     let disc_number: Handle<JsNumber> = cx.number(tag.disk().unwrap_or(0));
+    let lossless: Handle<JsBoolean> = cx.boolean(ident_lossless(file_ext.unwrap()));
+    let container: Handle<JsString> = cx.string(file_ext.unwrap().to_ascii_uppercase());
     
     metadata_obj.set(&mut cx, "title", title)?;
     metadata_obj.set(&mut cx, "artist", artist)?;
@@ -58,6 +61,8 @@ pub fn parse_file(mut cx: FunctionContext) -> JsResult<JsObject> {
     metadata_obj.set(&mut cx, "year", year)?;
     metadata_obj.set(&mut cx, "track_number", track_number)?;
     metadata_obj.set(&mut cx, "disc_number", disc_number)?;
+    metadata_obj.set(&mut cx, "lossless", lossless)?;
+    metadata_obj.set(&mut cx, "container", container)?;
 
     if tag.pictures().len() > 0 {
       let picture_b64: Handle<JsString> = cx.string(base64::encode(tag.pictures()[0].data()));
@@ -65,4 +70,16 @@ pub fn parse_file(mut cx: FunctionContext) -> JsResult<JsObject> {
     }
     
     Ok(metadata_obj)
+}
+
+pub fn ident_lossless(file_ext: &str) -> bool { 
+  let lowercase_ext: String = file_ext.to_ascii_lowercase();
+
+
+  let result: bool = match lowercase_ext.as_str() {
+    "wav" | "flac" => true,
+    _ => false,
+};
+
+  return result
 }
