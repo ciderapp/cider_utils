@@ -1,5 +1,3 @@
-const neonBinding = require('./index')
+import { parseFile as _parseFile } from '.';
 
-module.exports = {
-    parseFile: neonBinding.parseFile
-};
+export const parseFile = _parseFile;
