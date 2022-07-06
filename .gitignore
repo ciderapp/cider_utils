@@ -7,3 +7,5 @@ npm-debug.log*
 *.flac
 *.lock
 package-lock.json
+*.m4a
+*.aac
