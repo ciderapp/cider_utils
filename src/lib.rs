@@ -1,6 +1,6 @@
 use neon::prelude::*;
 use lofty::{Accessor, AudioFile, Probe, FileProperties};
-use std::{path::Path, ffi::OsStr};
+use std::{path::Path, ffi::OsStr, fs};
 extern crate neon;
 extern crate base64;
 
@@ -9,6 +9,19 @@ extern crate base64;
 fn main(mut cx: ModuleContext) -> NeonResult<()> {
     cx.export_function("parseFile", parse_file)?;
     Ok(())
+}
+
+pub fn recursive_folder_search(mut cx: FunctionContext) -> JsResult<JsArray> {
+    let args: Handle<JsArray> = cx.argument::<JsArray>(0)?;
+    let rust_vec: Result<Vec<Handle<JsValue>>, _> = args.to_vec(&mut cx);  
+    
+    for folder in rust_vec.unwrap() {
+      // Filter here
+    }
+    
+    let audio_files_arr = cx.empty_array();
+    
+    Ok(audio_files_arr)
 }
 
 pub fn parse_file(mut cx: FunctionContext) -> JsResult<JsObject> {
