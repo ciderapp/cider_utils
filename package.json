@@ -21,8 +21,8 @@
     "build-ci": "npm run build-upload -- --release",
     "build-ci-m1": "npm run build-upload2 -- --release",
     "build-release": "npm run build -- --release",
-    "install": "npm run build-release",
-    "prebuild-downloads": "prebuild-install -r napi",
+    "install": "prebuild-install -r napi -t 6 || npm run build-release",
+    "prebuild-downloads": "prebuild-install -r napi -t 6",
     "test": "cargo test"
   },
   "binary": {
