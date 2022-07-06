@@ -9,9 +9,14 @@
 
   "scripts": {
     "build": "cargo-cp-artifact -nc index.node -- cargo build --message-format=json-render-diagnostics",
-    "build-upload": "cargo-cp-artifact -nc prebuilds/index.node -- cargo build --message-format=json-render-diagnostics",
+    "build-upload": "run-script-os",
+    "build-upload:win32": "cargo-cp-artifact -nc prebuilds/win32/index.node -- cargo build --message-format=json-render-diagnostics",
+    "build-upload:linux": "cargo-cp-artifact -nc prebuilds/linux/index.node -- cargo build --message-format=json-render-diagnostics",
+    "build-upload:darwin": "cargo-cp-artifact -nc prebuilds/mac-x86/index.node -- cargo build --message-format=json-render-diagnostics",
+    "build-upload2": "cargo-cp-artifact -nc prebuilds/mac-arm/index.node -- cargo build --message-format=json-render-diagnostics",
     "build-debug": "npm run build --",
     "build-ci": "npm run build-upload -- --release",
+    "build-ci-m1": "npm run build-upload2 -- --release",
     "build-release": "npm run build -- --release",
     "install": "npm run build-release",
     "test": "cargo test"
@@ -19,6 +24,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "cargo-cp-artifact": "^0.1"
+    "cargo-cp-artifact": "^0.1",
+    "run-script-os": "^1.1.6"
   }
 }
