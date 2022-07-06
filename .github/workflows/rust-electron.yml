@@ -103,7 +103,7 @@ jobs:
         run: yarn run build-ci-m1
       - name: Compress x86 build
         uses: a7ul/tar-action@v1.1.0
-        id: compress
+        id: compress1
         with:
           command: c
           cwd: ./
@@ -112,7 +112,7 @@ jobs:
           outPath: cider_utils-v0.1.1-napi-v6-darwin-x64.tar.gz 
       - name: Compress arm build
         uses: a7ul/tar-action@v1.1.0
-        id: compress
+        id: compress2
         with:
           command: c
           cwd: ./
