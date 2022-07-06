@@ -1,7 +1,6 @@
 use neon::prelude::*;
 use lofty::{Accessor, AudioFile, Probe, FileProperties};
 use std::{path::Path, ffi::OsStr};
-use katatsuki::*;
 extern crate neon;
 extern crate base64;
 
@@ -17,12 +16,6 @@ pub fn parse_file(mut cx: FunctionContext) -> JsResult<JsObject> {
     let arg: Handle<JsString> = cx.argument(0)?; 
     let path_str: String = arg.value(&mut cx);
     let path: &Path = Path::new(&path_str);
-    let file_ext = path.extension().and_then(OsStr::to_str);
-
-
-    if file_ext.to_ascii_lowercase() == "aac"  { 
-
-    }
 
     let tagged_file = Probe::open(path)
 		.expect("ERROR: Bad path provided!")
@@ -40,6 +33,7 @@ pub fn parse_file(mut cx: FunctionContext) -> JsResult<JsObject> {
     let properties: &FileProperties = tagged_file.properties();
     let duration: u128 = properties.duration().as_millis();
     //let picture: &[Picture] = tag.pictures();
+    let file_ext = path.extension().and_then(OsStr::to_str);
     let metadata_obj: Handle<JsObject> = cx.empty_object();
 
     let title: Handle<JsString> = cx.string(tag.title().unwrap_or("0"));
