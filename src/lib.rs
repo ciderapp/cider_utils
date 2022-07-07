@@ -1,12 +1,15 @@
 use neon::prelude::*;
 use lofty::{Accessor, AudioFile, Probe, FileProperties};
-use std::{path::Path, ffi::OsStr, fs};
+use std::{path::Path, ffi::OsStr, fs, panic};
 extern crate neon;
 extern crate base64;
 
 
 #[neon::main]
 fn main(mut cx: ModuleContext) -> NeonResult<()> {
+    panic::set_hook(Box::new(|_info| {
+      // do nothing
+  }));
     cx.export_function("parseFile", parse_file)?;
     Ok(())
 }
