@@ -103,7 +103,7 @@ jobs:
         run: yarn run build-ci-m1
         
       - name: Create universal node module
-        run: lipo -create  -output ./prebuilds/mac-universal ./prebuilds/mac-arm/index.node ./prebuilds/mac-x86/index.node 
+        run: mkdir ./prebuilds/mac-universal; lipo -create  -output ./prebuilds/mac-universal/index.node ./prebuilds/mac-arm/index.node ./prebuilds/mac-x86/index.node 
       - name: Compress universal build
         uses: a7ul/tar-action@v1.1.0
         id: compress2
