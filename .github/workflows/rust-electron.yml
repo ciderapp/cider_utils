@@ -112,7 +112,7 @@ jobs:
           cwd: ./prebuilds/mac-universal/
           files: |
             ./index.node
-          outPath: cider_utils-v0.1.1-napi-v6-darwin-arm64,x64.tar.gz           
+          outPath: cider_utils-v0.1.1-napi-v6-darwin-x64.tar.gz           
        # Runs a set of commands using the runners shell
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.0
