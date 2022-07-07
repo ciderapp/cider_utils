@@ -23,6 +23,7 @@
     "build-release": "npm run build -- --release",
     "install": "npm run prebuild-downloads || npm run rebuild",
     "prebuild-downloads": "prebuild-install --runtime=napi --target=6 --verbose",
+    "prebuild-downloads-win": "prebuild-install --runtime=napi --target=6 --verbose --platform=win32",
     "rebuild": "npm run build-release",
     "test": "cargo test"
   },
