@@ -101,24 +101,18 @@ jobs:
 
       - name: Build binaries
         run: yarn run build-ci-m1
-      - name: Compress x86 build
-        uses: a7ul/tar-action@v1.1.0
-        id: compress1
-        with:
-          command: c
-          cwd: ./prebuilds/mac-x86/
-          files: |
-            ./index.node
-          outPath: cider_utils-v0.1.1-napi-v6-darwin-x64.tar.gz 
-      - name: Compress arm build
+        
+      - name: Create universal node module
+        run: lipo -create  -output ./prebuilds/mac-universal/index.node ./prebuilds/mac-arm/index.node ./prebuilds/mac-x86/index.node 
+      - name: Compress universal build
         uses: a7ul/tar-action@v1.1.0
         id: compress2
         with:
           command: c
-          cwd: ./prebuilds/mac-arm/
+          cwd: ./prebuilds/mac-universal/
           files: |
             ./index.node
-          outPath: cider_utils-v0.1.1-napi-v6-darwin-arm64.tar.gz           
+          outPath: cider_utils-v0.1.1-napi-v6-darwin-arm64,x64.tar.gz           
        # Runs a set of commands using the runners shell
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.0
