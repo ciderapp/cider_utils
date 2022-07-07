@@ -21,12 +21,15 @@
     "build-ci": "npm run build-upload -- --release",
     "build-ci-m1": "npm run build-upload2 -- --release",
     "build-release": "npm run build -- --release",
-    "install": "prebuild-install -r napi -t 6 || npm run build-release",
-    "prebuild-downloads": "prebuild-install -r napi -t 6",
+    "install": "npm run prebuild-downloads || npm run rebuild",
+    "prebuild-downloads": "prebuild-install --runtime=napi --target=6 --verbose",
+    "rebuild": "npm run build-release",
     "test": "cargo test"
   },
   "binary": {
-    "napi_versions": [6]
+    "napi_versions": [
+      6
+    ]
   },
   "author": "",
   "license": "ISC",

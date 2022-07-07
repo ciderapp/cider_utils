@@ -41,7 +41,7 @@ pub fn parse_file(mut cx: FunctionContext) -> JsResult<JsObject> {
 		// first tag we can find. Realistically, a tag reader would likely
 		// iterate through the tags to find a suitable one.
 		None => tagged_file.first_tag().expect("ERROR: No tags found!"),
-	};
+	  };
 
     let properties: &FileProperties = tagged_file.properties();
     let duration: u128 = properties.duration().as_millis();
