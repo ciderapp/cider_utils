@@ -16,7 +16,7 @@
     "build-upload:win32": "cargo-cp-artifact -nc prebuilds/win32/index.node -- cargo build --message-format=json-render-diagnostics",
     "build-upload:linux": "cargo-cp-artifact -nc prebuilds/linux/index.node -- cargo build --message-format=json-render-diagnostics",
     "build-upload:darwin": "cargo-cp-artifact -nc prebuilds/mac-x86/index.node -- cargo build --message-format=json-render-diagnostics",
-    "build-upload2": "cargo-cp-artifact -nc prebuilds/mac-arm/index.node -- cargo build --message-format=json-render-diagnostics",
+    "build-upload2": "cargo-cp-artifact -nc prebuilds/mac-arm/index.node -- cargo build --message-format=json-render-diagnostics --target=aarch64-apple-darwin",
     "build-debug": "npm run build --",
     "build-ci": "npm run build-upload -- --release",
     "build-ci-m1": "npm run build-upload2 -- --release",
