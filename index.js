@@ -1,6 +1,6 @@
 const { parseFile, recursiveFolderSearch } = require("./index.node");
 
-module.exports = { 
+module.exports = {
     parseFile: parseFile,
     recursiveFolderSearch: recursiveFolderSearch
 };
