@@ -42,8 +42,8 @@ pub fn recursive_folder_search(mut cx: FunctionContext) -> JsResult<JsObject> {
       let file_name_ascii_lowercase = file.file_name().to_ascii_lowercase();
       let file_ext_str = file_extension_parser(file_name_ascii_lowercase.to_str().unwrap());
       match file_ext_str  {
-        Some("mp3" | "flac" | "wav" | "opus") => parse_file_vec.push(file.file_name().to_str().unwrap().to_owned()),
-        Some("aac" | "m4a" | "ogg" | "webm") => music_metadata_vec.push(file.file_name().to_str().unwrap().to_owned()),
+        Some("mp3" | "flac" | "wav" | "opus") => parse_file_vec.push(file.path().as_os_str().to_str().unwrap().to_owned()),
+        Some("aac" | "m4a" | "ogg" | "webm") => music_metadata_vec.push(file.path().as_os_str().to_str().unwrap().to_owned()),
         _ => continue,
       };
     }
