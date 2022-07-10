@@ -1,6 +1,7 @@
 use neon::prelude::*;
 use lofty::{Accessor, AudioFile, Probe, FileProperties};
-use std::{path::Path, ffi::OsStr, fs, panic};
+use std::{path::Path, ffi::OsStr, panic};
+use walkdir::WalkDir;
 extern crate neon;
 extern crate base64;
 
@@ -11,20 +12,50 @@ fn main(mut cx: ModuleContext) -> NeonResult<()> {
       // do nothing
   }));
     cx.export_function("parseFile", parse_file)?;
+    cx.export_function("recursiveFolderSearch", recursive_folder_search)?;
     Ok(())
 }
 
-pub fn recursive_folder_search(mut cx: FunctionContext) -> JsResult<JsArray> {
-    let args: Handle<JsArray> = cx.argument::<JsArray>(0)?;
-    let rust_vec: Result<Vec<Handle<JsValue>>, _> = args.to_vec(&mut cx);  
+pub fn file_extension_parser(filename: &str) -> Option<&str> {    
+  Path::new(filename).extension().and_then(OsStr::to_str)
+}
+
+// Stolen from official Neon docs.
+pub fn vec_to_array<'a, C: Context<'a>>(vec: &Vec<String>, cx: &mut C) -> JsResult<'a, JsArray> {
+  let a = JsArray::new(cx, vec.len() as u32);
+
+  for (i, s) in vec.iter().enumerate() {
+      let v = cx.string(s);
+      a.set(cx, i as u32, v)?;
+  }
+
+  Ok(a)
+}
+
+pub fn recursive_folder_search(mut cx: FunctionContext) -> JsResult<JsObject> {
+    let arg: Handle<JsString> = cx.argument(0)?;
     
-    for folder in rust_vec.unwrap() {
-      // Filter here
+    let mut parse_file_vec: Vec<String> = Vec::new();
+    let mut music_metadata_vec: Vec<String> = Vec::new();
+
+    for file in WalkDir::new(arg.value(&mut cx)).follow_links(true).into_iter().filter_map(|e| e.ok()) {
+      let file_name_ascii_lowercase = file.file_name().to_ascii_lowercase();
+      let file_name_str = file_extension_parser(file_name_ascii_lowercase.to_str().unwrap());
+      match file_name_str.unwrap()  {
+        "mp3" | "flac" | "wav" | "opus" => parse_file_vec.push(file_name_ascii_lowercase.to_str().unwrap().to_owned()),
+        "aac" | "m4a" | "ogg" | "webm" => music_metadata_vec.push(file_name_ascii_lowercase.to_str().unwrap().to_owned()),
+        _ => continue,
+      };
     }
     
-    let audio_files_arr = cx.empty_array();
+    let result_obj: Handle<JsObject> = cx.empty_object();
+    let parse_file_array = vec_to_array(&parse_file_vec, &mut cx).unwrap();
+    let mm_file_array = vec_to_array(&music_metadata_vec, &mut cx).unwrap();
+
+    result_obj.set(&mut cx, "parseFile", parse_file_array)?;
+    result_obj.set(&mut cx, "musicMetadata", mm_file_array)?;
     
-    Ok(audio_files_arr)
+    Ok(result_obj)
 }
 
 pub fn parse_file(mut cx: FunctionContext) -> JsResult<JsObject> {

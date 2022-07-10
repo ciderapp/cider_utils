@@ -13,6 +13,7 @@ crate-type = ["cdylib"]
 [dependencies]
 lofty = "0.7.0"
 base64 = "0.13.0"
+walkdir = "2.3.2"
 
 [dependencies.neon]
 version = "0.10.1"
