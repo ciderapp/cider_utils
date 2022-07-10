@@ -34,7 +34,7 @@ jobs:
           cwd: ./prebuilds/linux/         
           files: |
             ./index.node
-          outPath: cider_utils-v0.1.1-napi-v6-linux-x64.tar.gz    
+          outPath: cider_utils-v0.1.5-napi-v6-linux-x64.tar.gz    
 
        # Runs a set of commands using the runners shell
       - name: Upload a Build Artifact
@@ -69,7 +69,7 @@ jobs:
           cwd: ./prebuilds/win32/
           files: |
             ./index.node
-          outPath: cider_utils-v0.1.1-napi-v6-win32-x64.tar.gz   
+          outPath: cider_utils-v0.1.5-napi-v6-win32-x64.tar.gz   
        # Runs a set of commands using the runners shell
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.0
@@ -112,7 +112,7 @@ jobs:
           cwd: ./prebuilds/mac-universal/
           files: |
             ./index.node
-          outPath: cider_utils-v0.1.1-napi-v6-darwin-x64.tar.gz 
+          outPath: cider_utils-v0.1.5-napi-v6-darwin-x64.tar.gz 
       - name: Compress universal build
         uses: a7ul/tar-action@v1.1.0
         id: compress
@@ -121,7 +121,7 @@ jobs:
           cwd: ./prebuilds/mac-universal/
           files: |
             ./index.node
-          outPath: cider_utils-v0.1.1-napi-v6-darwin-arm64.tar.gz          
+          outPath: cider_utils-v0.1.5-napi-v6-darwin-arm64.tar.gz          
        # Runs a set of commands using the runners shell
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.0
@@ -144,6 +144,6 @@ jobs:
         uses: marvinpinto/action-automatic-releases@v1.2.1
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "v0.1.1"
+          automatic_release_tag: "v0.1.5"
           prerelease: false
           files: ./**/*.tar.gz
