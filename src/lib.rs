@@ -17,7 +17,7 @@ fn main(mut cx: ModuleContext) -> NeonResult<()> {
 }
 
 pub fn file_extension_parser(filename: &str) -> Option<&str> {    
-  Path::new(filename).extension().and_then(OsStr::to_str)
+  return Path::new(filename).extension().and_then(OsStr::to_str)
 }
 
 // Stolen from official Neon docs.
@@ -40,14 +40,13 @@ pub fn recursive_folder_search(mut cx: FunctionContext) -> JsResult<JsObject> {
 
     for file in WalkDir::new(arg.value(&mut cx)).follow_links(true).into_iter().filter_map(|e| e.ok()) {
       let file_name_ascii_lowercase = file.file_name().to_ascii_lowercase();
-      let file_name_str = file_extension_parser(file_name_ascii_lowercase.to_str().unwrap());
-      match file_name_str.unwrap()  {
-        "mp3" | "flac" | "wav" | "opus" => parse_file_vec.push(file_name_ascii_lowercase.to_str().unwrap().to_owned()),
-        "aac" | "m4a" | "ogg" | "webm" => music_metadata_vec.push(file_name_ascii_lowercase.to_str().unwrap().to_owned()),
+      let file_ext_str = file_extension_parser(file_name_ascii_lowercase.to_str().unwrap());
+      match file_ext_str  {
+        Some("mp3" | "flac" | "wav" | "opus") => parse_file_vec.push(file.file_name().to_str().unwrap().to_owned()),
+        Some("aac" | "m4a" | "ogg" | "webm") => music_metadata_vec.push(file.file_name().to_str().unwrap().to_owned()),
         _ => continue,
       };
     }
-    
     let result_obj: Handle<JsObject> = cx.empty_object();
     let parse_file_array = vec_to_array(&parse_file_vec, &mut cx).unwrap();
     let mm_file_array = vec_to_array(&music_metadata_vec, &mut cx).unwrap();
