@@ -1,9 +1,10 @@
 cmake_minimum_required(VERSION 3.5)
 project(ciderutils C CXX)
 
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/.cmake)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(BUILD_SHARED_LIBS OFF)
+option(BUILD_SHARED_LIBS "" off)
 
 # Windows
 if(MSVC)
@@ -24,12 +25,15 @@ set(SOURCE_FILES
     src/utils.cc # Unfortunately, C++ is required for taglib
 )
 
+link_directories(${CMAKE_BINARY_DIR}/taglib/lib)
+
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${CMAKE_JS_SRC})
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_JS_INC})
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_JS_INC} ${CMAKE_BINARY_DIR}/taglib/include)
 target_include_directories(${PROJECT_NAME} PRIVATE "source")
+
+add_dependencies(${PROJECT_NAME} taglib)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "" SUFFIX ".node")
 add_compile_definitions(NAPI_VERSION=3)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC ${CMAKE_JS_LIB} zlibstatic)
-target_link_libraries(${PROJECT_NAME} PRIVATE tag)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${CMAKE_JS_LIB} zlibstatic tag)
