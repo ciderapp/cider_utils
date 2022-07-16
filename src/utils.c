@@ -112,3 +112,19 @@ int recursiveFolderSearch(const char *path, struct search_result *result)
 
     closedir(dir);
 }
+
+struct metadata parseFile(const char *path)
+{
+    struct metadata meta = { 0 };
+    meta.title           = path;
+    meta.artist          = "0";
+    meta.album           = "0";
+    meta.genre           = "0";
+    meta.container       = "0";
+
+    int len = strlen(path);
+    meta.lossless =
+      strncmp(path + len - 4, ".wav", 4) == 0 || strncmp(path + len - 5, ".wav", 5) == 0;
+
+    return meta;
+}
