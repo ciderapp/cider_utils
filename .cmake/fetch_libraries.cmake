@@ -11,6 +11,8 @@ FetchContent_Declare(
 
 # Include taglib
 # set(ZLIB_SOURCE ON)
+set(ENABLE_STATIC_RUNTIME ON)
+
 FetchContent_Declare(
     taglib
     GIT_REPOSITORY https://github.com/taglib/taglib

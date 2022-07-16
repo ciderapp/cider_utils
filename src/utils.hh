@@ -1,5 +1,10 @@
 #pragma once
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 struct search_result
 {
     char **paths;
@@ -14,7 +19,7 @@ struct metadata
     const char *genre;
     const char *container;
 
-    double duration_in_ms;
+    int duration_in_ms;
 
     int bitrate;
     int sample_rate;
@@ -29,3 +34,7 @@ struct metadata
 
 int recursiveFolderSearch(const char *path, struct search_result *result);
 struct metadata parseFile(const char *path);
+
+#ifdef __cplusplus
+}
+#endif
