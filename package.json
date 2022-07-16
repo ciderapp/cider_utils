@@ -12,14 +12,14 @@
   },
   "scripts": {
     "install": "run-script-os",
-    "install:win32": "prebuild-install --runtime=electron || yarn run rebuild",
-    "install:linux:darwin": "prebuild-install --runtime=electron --target=18.3.3 || yarn run rebuild",
+    "install:win32": "prebuild-install -r napi -t 3 || yarn run rebuild",
+    "install:linux:darwin": "prebuild-install -r napi -t 3 || yarn run rebuild",
     "build-binaries-electron": "run-script-os",
-    "build-binaries-electron-ci": "prebuild --backend cmake-js --platform win32 --platform linux --platform darwin --include-regex \"^.*\\.(node|dylib|lib|exp|dll|so(\\.[0-9])?)$\" -r electron -t 19.0.1 -t 16.0.7",
-    "build-binaries-electron:win32": "prebuild --backend cmake-js --platform win32 --include-regex \"^.*\\.(node|dylib|lib|exp|dll|so(\\.[0-9])?)$\" -r electron -t 19.0.3 -t 18.3.3 -t 16.0.7",
-    "build-binaries-electron:linux": "prebuild --backend cmake-js --platform linux --include-regex \"^.*\\.(node|dylib|lib|exp|dll|so(\\.[0-9])?)$\" -r electron -t 19.0.3 -t 18.3.3",
-    "build-binaries-electron:darwin": "prebuild --backend cmake-js --platform darwin --include-regex \"^.*\\.(node|dylib|lib|exp|dll|so(\\.[0-9])?)$\" -r electron -t 19.0.3 -t 18.3.3",
-    "build-binaries-electron2": "prebuild --backend cmake-js --platform darwin -a arm64 --include-regex \"^.*\\.(node|dylib|lib|exp|dll|so(\\.[0-9])?)$\" -r electron -t 19.0.3 -t 18.3.3",  
+    "build-binaries-electron-ci": "prebuild --backend cmake-js --platform win32 --platform linux --platform darwin --include-regex \"^.*\\.(node|dylib|lib|exp|dll|so(\\.[0-9])?)$\" -r napi -t 3",
+    "build-binaries-electron:win32": "prebuild --backend cmake-js --platform win32 --include-regex \"^.*\\.(node|dylib|lib|exp|dll|so(\\.[0-9])?)$\" -r napi -t 3",
+    "build-binaries-electron:linux": "prebuild --backend cmake-js --platform linux --include-regex \"^.*\\.(node|dylib|lib|exp|dll|so(\\.[0-9])?)$\" -r napi -t 3",
+    "build-binaries-electron:darwin": "prebuild --backend cmake-js --platform darwin --include-regex \"^.*\\.(node|dylib|lib|exp|dll|so(\\.[0-9])?)$\" -r napi -t 3",
+    "build-binaries-electron2": "prebuild --backend cmake-js --platform darwin -a arm64 --include-regex \"^.*\\.(node|dylib|lib|exp|dll|so(\\.[0-9])?)$\" -r napi -t 3",  
     "rebuild": "cmake-js compile"
   },
   "binary": {
