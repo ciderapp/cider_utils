@@ -1,12 +1,22 @@
-target
-index.node
-**/node_modules
-**/.DS_Store
-npm-debug.log*
-.history/
+build/
+taglib/
+prebuilds/
+
+# IDEs
+.vs/
+.vscode/
+.idea/
+
+# Node
+node_modules/
+Debug/
+Release/
+
+# Debug shit
+.cache
+shit/
+
+# Other stuff
 *.flac
-*.lock
-package-lock.json
 *.m4a
 *.aac
-build/config.gypi
