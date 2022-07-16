@@ -19,8 +19,7 @@ napi_value parseFileWrapper(napi_env env, napi_callback_info info)
     napi_get_value_string_utf8(env, argv[0], NULL, 0, &path_len);
     path = malloc(path_len + 1);
     napi_get_value_string_utf8(env, argv[0], path, path_len + 1, NULL);
-
-    if (path[path_len - 1] == '/') path[path_len - 1] = '\0';
+    path[path_len] = '\0';
 
     // Parse file
     struct metadata mdata = parseFile(path);
@@ -100,6 +99,7 @@ napi_value recursiveFolderSearchWrapper(napi_env env, napi_callback_info info)
     napi_get_value_string_utf8(env, argv[0], NULL, 0, &path_len);
     path = malloc(path_len + 1);
     napi_get_value_string_utf8(env, argv[0], path, path_len + 1, NULL);
+    path[path_len] = '\0';
 
     if (path[path_len - 1] == '/') path[path_len - 1] = '\0';
 
@@ -109,35 +109,18 @@ napi_value recursiveFolderSearchWrapper(napi_env env, napi_callback_info info)
     free(path);
 
     napi_value parsefile;
-    napi_value musicmeta;
-    napi_create_array_with_length(env, result.parseFile_length, &parsefile);
-    napi_create_array_with_length(env, result.musicMeta_length, &musicmeta);
-
-    for (int i = 0; i < result.parseFile_length; i++)
+    napi_create_array_with_length(env, result.length, &parsefile);
+    for (int i = 0; i < result.length; i++)
     {
         napi_value  str;
-        const char *cstr = result.parseFile_paths[i];
+        const char *cstr = result.paths[i];
         napi_create_string_utf8(env, cstr, strlen(cstr), &str);
         napi_set_element(env, parsefile, i, str);
 
-        free(result.parseFile_paths[i]);
+        free(result.paths[i]);
     }
 
-    for (int i = 0; i < result.musicMeta_length; i++)
-    {
-        napi_value  str;
-        const char *cstr = result.musicMeta_paths[i];
-        napi_create_string_utf8(env, cstr, strlen(cstr), &str);
-        napi_set_element(env, musicmeta, i, str);
-
-        free(result.musicMeta_paths[i]);
-    }
-
-    napi_value result_obj;
-    napi_create_object(env, &result_obj);
-    napi_set_named_property(env, result_obj, "parseFile", parsefile);
-    napi_set_named_property(env, result_obj, "musicMetadata", musicmeta);
-    return result_obj;
+    return parsefile;
 }
 
 napi_value init(napi_env env, napi_value exports)

@@ -2,11 +2,8 @@
 
 struct search_result
 {
-    int    parseFile_length;
-    char **parseFile_paths;
-
-    int    musicMeta_length;
-    char **musicMeta_paths;
+    char **paths;
+    int    length;
 };
 
 struct metadata
