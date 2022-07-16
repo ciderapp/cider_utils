@@ -1,9 +1,7 @@
 # cider_utils
+Modules written in Rust to accelerate CPU bound workloads on the Client-Side of Cider app.
 
-Modules written in C to accelerate CPU bound workloads on the Client-Side of Cider app.
-
-*Assuming you know how to set up a C development environment.*
+*Assuming you know how to set up a Rust development environment.*
 
 Usage:
-`yarn` to build `index.node` which is the node facing module.
-To access the module, import `index.js`, which will give you functions `parseFile` and `recursiveFolderSearch`.
+`npm install` to build `index.node` which is the node facing module.

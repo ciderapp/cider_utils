@@ -1,6 +1,6 @@
 {
   "name": "cider_utils",
-  "version": "0.2.0",
+  "version": "0.1.5",
   "description": "",
   "main": "index.js",
   "files": [
@@ -11,28 +11,32 @@
     "url": "https://github.com/ciderapp/cider_utils.git"
   },
   "scripts": {
-    "install": "run-script-os",
-    "install:win32": "prebuild-install -r napi -t 3 || yarn run rebuild",
-    "install:linux:darwin": "prebuild-install -r napi -t 3 || yarn run rebuild",
-    "build-binaries-electron": "run-script-os",
-    "build-binaries-electron-ci": "prebuild --backend cmake-js --platform win32 --platform linux --platform darwin --include-regex \"^.*\\.(node|dylib|lib|exp|dll|so(\\.[0-9])?)$\" -r napi -t 3",
-    "build-binaries-electron:win32": "prebuild --backend cmake-js --platform win32 --include-regex \"^.*\\.(node|dylib|lib|exp|dll|so(\\.[0-9])?)$\" -r napi -t 3",
-    "build-binaries-electron:linux": "prebuild --backend cmake-js --platform linux --include-regex \"^.*\\.(node|dylib|lib|exp|dll|so(\\.[0-9])?)$\" -r napi -t 3",
-    "build-binaries-electron:darwin": "prebuild --backend cmake-js --platform darwin --include-regex \"^.*\\.(node|dylib|lib|exp|dll|so(\\.[0-9])?)$\" -r napi -t 3",
-    "build-binaries-electron2": "prebuild --backend cmake-js --platform darwin -a arm64 --include-regex \"^.*\\.(node|dylib|lib|exp|dll|so(\\.[0-9])?)$\" -r napi -t 3",  
-    "rebuild": "cmake-js compile"
+    "build": "cargo-cp-artifact -nc index.node -- cargo build --message-format=json-render-diagnostics",
+    "build-upload": "run-script-os",
+    "build-upload:win32": "cargo-cp-artifact -nc prebuilds/win32/index.node -- cargo build --message-format=json-render-diagnostics",
+    "build-upload:linux": "cargo-cp-artifact -nc prebuilds/linux/index.node -- cargo build --message-format=json-render-diagnostics",
+    "build-upload:darwin": "cargo-cp-artifact -nc prebuilds/mac-x86/index.node -- cargo build --message-format=json-render-diagnostics",
+    "build-upload2": "cargo-cp-artifact -nc prebuilds/mac-arm/index.node -- cargo build --message-format=json-render-diagnostics --target=aarch64-apple-darwin",
+    "build-debug": "npm run build --",
+    "build-ci": "npm run build-upload -- --release",
+    "build-ci-m1": "npm run build-upload2 -- --release",
+    "build-release": "npm run build -- --release",
+    "install": "npm run prebuild-downloads || npm run rebuild",
+    "prebuild-downloads": "prebuild-install --runtime=napi --target=6 --verbose",
+    "prebuild-downloads-win": "prebuild-install --runtime=napi --target=6 --verbose --platform=win32",
+    "rebuild": "npm run build-release",
+    "test": "cargo test"
   },
   "binary": {
     "napi_versions": [
-      3
+      6
     ]
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "cmake-js": "^6.3.2",
+    "cargo-cp-artifact": "^0.1",
     "prebuild-install": "^7.1.1",
-    "prebuild": "git+https://github.com/ciderapp/prebuild.git",
     "run-script-os": "^1.1.6"
   }
 }

@@ -1,6 +1,6 @@
-const ciderutils = require("./build/Release/ciderutils.node");
+const { parseFile, recursiveFolderSearch } = require("./index.node");
 
 module.exports = {
-    parseFile: ciderutils.parseFile,
-    recursiveFolderSearch: ciderutils.recursiveFolderSearch
-};
+    parseFile: parseFile,
+    recursiveFolderSearch: recursiveFolderSearch
+}; 
