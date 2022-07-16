@@ -11,6 +11,17 @@
 
 #include <taglib/tag.h>
 #include <taglib/fileref.h>
+#include <taglib/tpropertymap.h>
+
+#include <taglib/attachedpictureframe.h>
+#include <taglib/flacfile.h>
+#include <taglib/mp4file.h>
+#include <taglib/mpegfile.h>
+#include <taglib/oggfile.h>
+#include <taglib/wavfile.h>
+#include <taglib/opusfile.h>
+
+#include "b64.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -102,11 +113,6 @@ extern "C"
         meta.container       = "0";
         meta.duration_in_ms  = -1;
 
-        // TODO: Better Lossless/Lossy detection
-        int len = strlen(path);
-        meta.lossless =
-          strncmp(path + len - 4, ".wav", 4) == 0 || strncmp(path + len - 5, ".flac", 5) == 0;
-
         TagLib::FileRef file(path);
         if (file.isNull())
         {
@@ -125,19 +131,104 @@ extern "C"
         meta.album  = strdup(tag->album().toCString(true));
         meta.genre  = strdup(tag->genre().toCString(true));
 
-        const char *container = strrchr(path, '.') + 1;
-        meta.container        = strndup(container, strlen(container));
+        meta.container = strrchr(path, '.') + 1;
 
         meta.duration_in_ms = file.audioProperties()->lengthInMilliseconds();
         meta.bitrate        = file.audioProperties()->bitrate();
         meta.sample_rate    = file.audioProperties()->sampleRate();
-        // TODO: meta.bit_depth
 
         meta.year  = tag->year();
         meta.track = tag->track();
-        // TODO: meta.disc
 
-        // TODO: Artwork
+        if (tag->properties().contains("DISCNUMBER"))
+            meta.disc = tag->properties()["DISCNUMBER"].front().toInt();
+
+        auto id3v2_picture = [&meta](TagLib::ID3v2::Tag *tag)
+        {
+            auto list = tag->frameListMap()["APIC"];
+            if (list.size() > 0)
+            {
+                // Search for Front Cover
+                for (auto frame : list)
+                {
+                    auto art = reinterpret_cast<TagLib::ID3v2::AttachedPictureFrame *>(frame);
+                    if (art->type() != TagLib::ID3v2::AttachedPictureFrame::FrontCover) continue;
+                    meta.artwork = b64_encode(
+                      reinterpret_cast<const unsigned char *>(art[0].picture().data()),
+                      art[0].picture().size());
+                }
+            }
+        };
+
+        auto flac_picture = [&meta](TagLib::List<TagLib::FLAC::Picture *> list)
+        {
+            // Search for Front Cover
+            for (auto picture : list)
+            {
+                if (picture->type() != TagLib::FLAC::Picture::FrontCover) continue;
+                meta.artwork = b64_encode(
+                  reinterpret_cast<const unsigned char *>(picture->data().data()),
+                  picture->data().size());
+            }
+        };
+
+        // Supported Codecs: FLAC, AAC, ALAC, MP3, WAV, Opus
+        // Supported Containers: FLAC, MP4, WAV, Opus
+        if (strncmp(meta.container, "flac", 4) == 0)
+        {
+            TagLib::FLAC::File *flac = dynamic_cast<TagLib::FLAC::File *>(file.file());
+
+            meta.lossless  = 1;
+            meta.bit_depth = flac->audioProperties()->bitsPerSample();
+
+            flac_picture(flac->pictureList());
+        }
+        else if (
+          strncmp(meta.container, "m4a", 3) == 0 || strncmp(meta.container, "aac", 3) == 0 ||
+          strncmp(meta.container, "alac", 3) == 0)
+        {
+            TagLib::MP4::File *mp4 = dynamic_cast<TagLib::MP4::File *>(file.file());
+
+            meta.bit_depth = mp4->audioProperties()->bitsPerSample();
+            meta.lossless  = mp4->audioProperties()->codec() == TagLib::MP4::Properties::ALAC;
+
+            // TODO: meta.artwork
+        }
+        else if (strncmp(meta.container, "mp3", 3) == 0)
+        {
+            TagLib::MPEG::File *mp3 = dynamic_cast<TagLib::MPEG::File *>(file.file());
+
+            if (mp3->hasID3v2Tag()) id3v2_picture(mp3->ID3v2Tag());
+        }
+        else if (strncmp(meta.container, "ogg", 3) == 0)
+        {
+            TagLib::Ogg::File *ogg = dynamic_cast<TagLib::Ogg::File *>(file.file());
+
+            printf("CIDERUTILS: OGG container unsupported due to inability to determine codec\n");
+
+            // TODO: meta.lossless
+            // TODO: meta.bit_depth
+            // TODO: meta.artwork
+        }
+        else if (strncmp(meta.container, "opus", 4) == 0)
+        {
+            TagLib::Ogg::Opus::File *opus = dynamic_cast<TagLib::Ogg::Opus::File *>(file.file());
+
+            meta.lossless = 0;
+            flac_picture(opus->tag()->pictureList());
+        }
+        else if (strncmp(meta.container, "wav", 3) == 0)
+        {
+            TagLib::RIFF::WAV::File *wav = dynamic_cast<TagLib::RIFF::WAV::File *>(file.file());
+
+            meta.bit_depth = wav->audioProperties()->bitsPerSample();
+            meta.lossless  = 1;
+
+            if (wav->hasID3v2Tag()) id3v2_picture(wav->ID3v2Tag());
+        }
+        else
+            printf("CIDERUTILS: unknown container %s\n", meta.container);
+
         return meta;
     }
 

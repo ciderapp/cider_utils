@@ -34,18 +34,22 @@ napi_value parseFileWrapper(napi_env env, napi_callback_info info)
     // Title
     napi_create_string_utf8(env, mdata.title, strlen(mdata.title), &temp);
     napi_set_named_property(env, result_obj, "title", temp);
+    free((void *) mdata.title);
 
     // Artist
     napi_create_string_utf8(env, mdata.artist, strlen(mdata.artist), &temp);
     napi_set_named_property(env, result_obj, "artist", temp);
+    free((void *) mdata.artist);
 
     // Album
     napi_create_string_utf8(env, mdata.album, strlen(mdata.album), &temp);
     napi_set_named_property(env, result_obj, "album", temp);
+    free((void *) mdata.album);
 
     // Genre
     napi_create_string_utf8(env, mdata.genre, strlen(mdata.genre), &temp);
     napi_set_named_property(env, result_obj, "genre", temp);
+    free((void *) mdata.genre);
 
     // Container
     napi_create_string_utf8(env, mdata.container, strlen(mdata.container), &temp);
@@ -84,6 +88,13 @@ napi_value parseFileWrapper(napi_env env, napi_callback_info info)
     // Lossless
     napi_get_boolean(env, mdata.lossless, &temp);
     napi_set_named_property(env, result_obj, "lossless", temp);
+
+    if (mdata.artwork != NULL)
+    {
+        napi_create_string_latin1(env, mdata.artwork, strlen(mdata.artwork), &temp);
+        napi_set_named_property(env, result_obj, "artwork", temp);
+        free((void *) mdata.artwork);
+    }
 
     free(path);
 

@@ -6,6 +6,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/.cmake)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 option(BUILD_SHARED_LIBS "" off)
 
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,-z,defs")
+
 # Windows
 if(MSVC)
     include_directories("extern/dirent_win32") # dirent for Windows
@@ -22,6 +24,8 @@ include(fetch_libraries)
 
 set(SOURCE_FILES
     src/interop.c
+    src/b64.c
+
     src/utils.cc # Unfortunately, C++ is required for taglib
 )
 
@@ -36,4 +40,5 @@ add_dependencies(${PROJECT_NAME} taglib)
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "" SUFFIX ".node")
 add_compile_definitions(NAPI_VERSION=3)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC ${CMAKE_JS_LIB} zlibstatic tag)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${CMAKE_JS_LIB})
+target_link_libraries(${PROJECT_NAME} PRIVATE zlibstatic tag)

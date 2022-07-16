@@ -3,6 +3,7 @@ include(ExternalProject)
 
 # Include zlib-ng
 set(ZLIB_ENABLE_TESTS OFF)
+set(ZLIB_COMPAT ON)
 
 FetchContent_Declare(
     zlib
