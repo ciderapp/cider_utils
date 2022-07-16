@@ -28,4 +28,4 @@ target_include_directories(ciderutils PRIVATE "source")
 set_target_properties(ciderutils PROPERTIES PREFIX "" SUFFIX ".node")
 add_compile_definitions(NAPI_VERSION=3)
 
-target_link_libraries(ciderutils ${CMAKE_JS_LIB} tag_c)
+target_link_libraries(ciderutils ${CMAKE_JS_LIB} zlib tag_c)
