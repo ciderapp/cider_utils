@@ -192,7 +192,14 @@ extern "C"
             meta.bit_depth = mp4->audioProperties()->bitsPerSample();
             meta.lossless  = mp4->audioProperties()->codec() == TagLib::MP4::Properties::ALAC;
 
-            // TODO: meta.artwork
+            if (mp4->tag()->contains("covr"))
+            {
+                auto covr = mp4->tag()->item("covr").toCoverArtList()[0].data();
+                meta.artwork =
+                  b64_encode(reinterpret_cast<const unsigned char *>(covr.data()), covr.size());
+            }
+
+            if (mp4->tag()->contains("disk")) meta.disc = mp4->tag()->item("disk").toInt();
         }
         else if (strncmp(meta.container, "mp3", 3) == 0)
         {
