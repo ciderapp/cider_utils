@@ -1,4 +1,4 @@
-const ciderutils = require("./build/lib/ciderutils.node");
+const ciderutils = require("./build/Release/ciderutils.node");
 
 module.exports = {
     parseFile: ciderutils.parseFile,
