@@ -74,7 +74,7 @@ int recursiveFolderSearch(const char *path, struct search_result *result)
 
 struct metadata parseFile(const char *path)
 {
-    printf("CIDERUTILS: parsing file %s\n", path);
+    // printf("CIDERUTILS: parsing file %s\n", path);
 
     struct metadata meta = { 0 };
     meta.title           = path;
