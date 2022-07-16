@@ -32,4 +32,4 @@ set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "" SUFFIX ".node")
 add_compile_definitions(NAPI_VERSION=3)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC ${CMAKE_JS_LIB} zlibstatic)
-target_link_libraries(${PROJECT_NAME} PRIVATE tag_c)
+target_link_libraries(${PROJECT_NAME} PRIVATE tag)

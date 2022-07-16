@@ -5,8 +5,6 @@
 #include <errno.h>
 
 #include <dirent.h>
-#include <taglib/tag.h>
-#include <taglib/tiostream.h>
 #ifdef __linux__
 #include <sys/stat.h>
 #endif
