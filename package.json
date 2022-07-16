@@ -11,8 +11,17 @@
     "url": "https://github.com/ciderapp/cider_utils.git"
   },
   "scripts": {
-    "install": "cmake-js compile",
-    "todo": "echo 'Re-add all the prebuild stuff'"
+    "install": "run-script-os",
+    "install:win32": "prebuild-install --runtime=electron || npm run rebuild",
+    "install:linux:darwin": "prebuild-install --runtime=electron --target=18.3.3 || npm run rebuild",
+    "todo": "echo 'Re-add all the prebuild stuff'",
+    "build-binaries-electron": "run-script-os",
+    "build-binaries-electron-ci": "prebuild --platform win32 --platform linux --platform darwin --include-regex \"^.*\\.(node|dylib|lib|exp|dll|so(\\.[0-9])?)$\" -r electron -t 19.0.1 -t 16.0.7",
+    "build-binaries-electron:win32": "prebuild --platform win32 --include-regex \"^.*\\.(node|dylib|lib|exp|dll|so(\\.[0-9])?)$\" -r electron -t 19.0.3 -t 18.3.3 -t 16.0.7",
+    "build-binaries-electron:linux": "prebuild --platform linux --include-regex \"^.*\\.(node|dylib|lib|exp|dll|so(\\.[0-9])?)$\" -r electron -t 19.0.3 -t 18.3.3",
+    "build-binaries-electron:darwin": "prebuild --platform darwin --include-regex \"^.*\\.(node|dylib|lib|exp|dll|so(\\.[0-9])?)$\" -r electron -t 19.0.3 -t 18.3.3",
+    "build-binaries-electron2": "prebuild --platform darwin -a arm64 --include-regex \"^.*\\.(node|dylib|lib|exp|dll|so(\\.[0-9])?)$\" -r electron -t 19.0.3 -t 18.3.3",  
+    "rebuild": "cmake-js compile"
   },
   "binary": {
     "napi_versions": [
@@ -24,6 +33,7 @@
   "dependencies": {
     "cmake-js": "^6.3.2",
     "prebuild-install": "^7.1.1",
+    "prebuild": "git+https://github.com/ciderapp/prebuild.git",
     "run-script-os": "^1.1.6"
   }
 }
