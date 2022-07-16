@@ -6,7 +6,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Windows
 if(MSVC)
-    target_include_directories(ciderutils PRIVATE "extern/dirent_win32") # dirent for Windows
+    target_include_directories(${PROJECT_NAME} PRIVATE "extern/dirent_win32") # dirent for Windows
 
     if(CMAKE_JS_NODELIB_DEF AND CMAKE_JS_NODELIB_TARGET)
         # Generate node.lib
@@ -21,11 +21,11 @@ set(SOURCE_FILES
     src/utils.c
 )
 
-add_library(ciderutils SHARED ${SOURCE_FILES} ${CMAKE_JS_SRC})
-target_include_directories(ciderutils PUBLIC ${CMAKE_JS_INC})
-target_include_directories(ciderutils PRIVATE "source")
+add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${CMAKE_JS_SRC})
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_JS_INC})
+target_include_directories(${PROJECT_NAME} PRIVATE "source")
 
-set_target_properties(ciderutils PROPERTIES PREFIX "" SUFFIX ".node")
+set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "" SUFFIX ".node")
 add_compile_definitions(NAPI_VERSION=3)
 
-target_link_libraries(ciderutils ${CMAKE_JS_LIB} zlib tag_c)
+target_link_libraries(${PROJECT_NAME} ${CMAKE_JS_LIB} zlib tag_c)
