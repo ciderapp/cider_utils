@@ -6,7 +6,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Windows
 if(MSVC)
-    target_include_directories(${PROJECT_NAME} PRIVATE "extern/dirent_win32") # dirent for Windows
+    include_directories("extern/dirent_win32") # dirent for Windows
 
     if(CMAKE_JS_NODELIB_DEF AND CMAKE_JS_NODELIB_TARGET)
         # Generate node.lib

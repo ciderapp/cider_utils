@@ -37,7 +37,7 @@ int recursiveFolderSearch(const char *path, struct search_result *result)
 
         char *full_path = malloc(strlen(path) + strlen(ent->d_name) + 2);
         sprintf(full_path, "%s/%s", path, ent->d_name);
-#ifdef _WIN32
+#ifndef __linux__
         if (ent->d_type == DT_DIR)
             recursiveFolderSearch(full_path, result);    // ha ha stack go brrr
         else
