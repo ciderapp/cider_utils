@@ -1,0 +1,15 @@
+build/
+
+# IDEs
+.vs/
+.vscode/
+.idea/
+
+# Node
+node_modules/
+Debug/
+Release/
+
+# Debug shit
+.cache
+shit/

@@ -1,0 +1,22 @@
+{
+  "name": "cider_utils",
+  "version": "1.0.0",
+  "author": "GamingLiamStudios",
+  "license": "MIT",
+  "private": true,
+  "main": "index.js",
+  "files": [
+    "index.d.ts"
+  ],
+  "dependencies": {
+    "cmake-js": "^6.3.2"
+  },
+  "binary": {
+    "napi_versions": [
+      3
+    ]
+  },
+  "scripts": {
+    "install": "cmake-js compile"
+  }
+}
