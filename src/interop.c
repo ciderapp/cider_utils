@@ -24,11 +24,7 @@ napi_value parseFileWrapper(napi_env env, napi_callback_info info)
     // Parse file
     struct metadata mdata = parseFile(path);
 
-    if (mdata.duration_in_ms == -1)
-    {
-        napi_throw_error(env, "parseFile", "Failed to parse file");
-        return NULL;
-    }
+    if (mdata.duration_in_ms == -1) return NULL;
 
     napi_value temp;
     napi_value result_obj;

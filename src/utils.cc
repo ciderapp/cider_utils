@@ -102,6 +102,7 @@ extern "C"
         meta.album           = "0";
         meta.genre           = "0";
         meta.container       = "0";
+        meta.duration_in_ms  = -1;
 
         // TODO: Better Lossless/Lossy detection
         int len = strlen(path);
