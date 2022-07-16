@@ -172,7 +172,8 @@ extern "C"
             }
         };
 
-        // Supported Codecs: FLAC, AAC, ALAC, MP3, WAV, Opus
+        // Does not support ID3v1 metadata
+        // Supported Codecs: FLAC, AAC, ALAC, MP3, WAV(with ID3v2 Metadata), Opus
         // Supported Containers: FLAC, MP4, WAV, Opus
         if (strncmp(meta.container, "flac", 4) == 0)
         {
@@ -182,6 +183,19 @@ extern "C"
             meta.bit_depth = flac->audioProperties()->bitsPerSample();
 
             flac_picture(flac->pictureList());
+
+            if (flac->hasXiphComment())
+            {
+                auto xiph = flac->xiphComment();
+                if (xiph->contains("DISCNUMBER"))
+                    meta.disc = xiph->fieldListMap()["DISCNUMBER"][0].split("/")[0].toInt();
+            }
+            else if (flac->hasID3v2Tag())
+            {
+                auto id3v2 = flac->ID3v2Tag();
+                if (id3v2->frameListMap().contains("TPOS"))    // Disc number
+                    meta.disc = id3v2->frameListMap()["TPOS"][0]->toString().split("/")[0].toInt();
+            }
         }
         else if (
           strncmp(meta.container, "m4a", 3) == 0 || strncmp(meta.container, "aac", 3) == 0 ||
@@ -205,7 +219,14 @@ extern "C"
         {
             TagLib::MPEG::File *mp3 = dynamic_cast<TagLib::MPEG::File *>(file.file());
 
-            if (mp3->hasID3v2Tag()) id3v2_picture(mp3->ID3v2Tag());
+            if (mp3->hasID3v2Tag())
+            {
+                auto id3v2 = mp3->ID3v2Tag();
+
+                id3v2_picture(id3v2);
+                if (id3v2->frameListMap().contains("TPOS"))    // Disc number
+                    meta.disc = id3v2->frameListMap()["TPOS"][0]->toString().split("/")[0].toInt();
+            }
         }
         else if (strncmp(meta.container, "ogg", 3) == 0)
         {
@@ -223,6 +244,9 @@ extern "C"
 
             meta.lossless = 0;
             flac_picture(opus->tag()->pictureList());
+
+            if (opus->tag()->contains("DISCNUMBER"))
+                meta.disc = opus->tag()->fieldListMap()["DISCNUMBER"][0].split("/")[0].toInt();
         }
         else if (strncmp(meta.container, "wav", 3) == 0)
         {
@@ -231,7 +255,14 @@ extern "C"
             meta.bit_depth = wav->audioProperties()->bitsPerSample();
             meta.lossless  = 1;
 
-            if (wav->hasID3v2Tag()) id3v2_picture(wav->ID3v2Tag());
+            if (wav->hasID3v2Tag())
+            {
+                auto id3v2 = wav->ID3v2Tag();
+
+                id3v2_picture(id3v2);
+                if (id3v2->frameListMap().contains("TPOS"))    // Disc number
+                    meta.disc = id3v2->frameListMap()["TPOS"][0]->toString().split("/")[0].toInt();
+            }
         }
         else
             printf("CIDERUTILS: unknown container %s\n", meta.container);
