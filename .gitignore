@@ -6,6 +6,7 @@ prebuilds/
 .vs/
 .vscode/
 .idea/
+.history/
 
 # Node
 node_modules/
@@ -20,3 +21,4 @@ shit/
 *.flac
 *.m4a
 *.aac
+
