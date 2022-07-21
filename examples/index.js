@@ -2,7 +2,7 @@ const { parseFile } = require("../index.node");
 const fs = require('fs');
  
 // json data
-let jsonData = parseFile("e:\\VA\\Music\\Osu music pack completed\\besssst.mp3");
+let jsonData = parseFile("e:\\VA\\Music\\My Music\\Feel_The_Power_of_Now.mp3");
 let u = jsonData
 // replace artwork with artwork size in console.log
 u["artwork"] = (u["artwork"] ?? '').length

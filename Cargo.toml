@@ -11,7 +11,7 @@ crate-type = ["cdylib"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-lofty = "0.7.1"
+lofty = { git = "https://github.com/Serial-ATA/lofty-rs", branch = "main" }
 base64 = "0.13.0"
 walkdir = "2.3.2"
 
